@@ -1,0 +1,12 @@
+1. Find distance from aruco to robot
+
+- Camera pixels
+- Pixels at 1 m away
+- Find const of proportionality for pixel to size
+- Calculate stuff for pixel and use vert height because it won't change and arUco is square
+- Boom distance
+2. Find angle from aruco to robot
+
+-
+
+3. Trigonometry the hell out of it and find the position on field
