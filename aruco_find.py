@@ -5,6 +5,8 @@ import os
 import time
 import math
 
+const = 4900
+
 def findArucoMarkers(img, markerSize = 6, totalMarkers=250, draw=True):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -30,10 +32,10 @@ def findArucoMarkers(img, markerSize = 6, totalMarkers=250, draw=True):
             bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
             topLeft = (int(topLeft[0]), int(topLeft[1]))
 
-        cv2.line(img, topLeft, topRight, (0,255,0), 2)
-        cv2.line(img, topRight, bottomRight, (0,255,0), 2)
-        cv2.line(img, bottomRight, bottomLeft, (0,255,0), 2)
-        cv2.line(img, bottomLeft, topLeft, (0,255,0), 2)
+        cv2.line(img, topLeft, topRight, (0,255,0), 6)
+        cv2.line(img, topRight, bottomRight, (0,255,0), 6)
+        cv2.line(img, bottomRight, bottomLeft, (0,255,0), 6)
+        cv2.line(img, bottomLeft, topLeft, (0,255,0), 6)
 
 
         return topRight, bottomRight, bottomLeft, topLeft
@@ -46,7 +48,18 @@ while True:
 
     success, img = cap.read()
     tr, br, bl, tl = findArucoMarkers(img)
-    print(tr, br, bl, tl)
+    if tr == None:
+        print(None)
+    else:
+        trX, trY = tr
+        brX, brY = br
+        pix = brY-trY
+
+        dist = const/pix
+        print(dist)
+
+
+
 
     cv2.imshow('img',img)
 
