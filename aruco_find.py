@@ -1,13 +1,14 @@
 import cv2
 import cv2.aruco as aruco
-import numpy as np
-import os
-import time
-import math
 
 const = 4900
+font = cv2.FONT_HERSHEY_SIMPLEX
+fontScale = 1
+color = (0,255,255)
+thickness = 2
 
-def findArucoMarkers(img, markerSize = 6, totalMarkers=250, draw=True):
+
+def findArucoMarkers(img, markerSize = 6, totalMarkers=250):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     key = getattr(aruco, f'DICT_{markerSize}X{markerSize}_{totalMarkers}')
@@ -38,6 +39,7 @@ def findArucoMarkers(img, markerSize = 6, totalMarkers=250, draw=True):
         cv2.line(img, bottomLeft, topLeft, (0,255,0), 6)
 
 
+
         return topRight, bottomRight, bottomLeft, topLeft
     else:
         return None, None, None, None
@@ -56,6 +58,7 @@ while True:
         pix = brY-trY
 
         dist = const/pix
+        image = cv2.putText(img, f"Distance: {dist}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
         print(dist)
 
 
