@@ -55,7 +55,13 @@ while True:
     else:
         trX, trY = tr
         brX, brY = br
-        pix = brY-trY
+        tlX, tlY = tl
+        blX, blY = bl
+        topleft = trY+tlY
+        topleft /= 2
+        topRight = brY+blY
+        topRight /= 2
+        pix = topRight - topleft
 
         dist = const/pix
         image = cv2.putText(img, f"Distance: {dist}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
