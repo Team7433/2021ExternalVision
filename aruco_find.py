@@ -1,11 +1,15 @@
 import cv2
 import cv2.aruco as aruco
+import time
 
-const = 4900
+
 font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 1
 color = (0,255,255)
 thickness = 2
+const = 4830
+
+
 
 
 def findArucoMarkers(img, markerSize = 6, totalMarkers=250):
@@ -44,11 +48,21 @@ def findArucoMarkers(img, markerSize = 6, totalMarkers=250):
     else:
         return None, None, None, None
 
+def findkProportion(distance=30, do = False, img = None):
+    if do == False:
+        return distance
+    elif do == True:
+        for count in range(5, 1):
+            time.sleep(1)
+            cv2.putText(img, f"{count}", (10,10), font, fontScale, color, thickness, cv2.LINE_AA)
+
+
 cap = cv2.VideoCapture(0)
 
 while True:
 
     success, img = cap.read()
+    findkProportion(img=img, do=True)
     tr, br, bl, tl = findArucoMarkers(img)
     if tr == None:
         print(None)
@@ -62,6 +76,7 @@ while True:
         topRight = brY+blY
         topRight /= 2
         pix = topRight - topleft
+        print(pix)
 
         dist = const/pix
         image = cv2.putText(img, f"Distance: {dist}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
