@@ -39,17 +39,32 @@ def findArucoMarkers(img, markerSize = 6, totalMarkers=250, draw=True):
         return None, None, None, None
 cap = cv2.VideoCapture(0)
 
-def findDistConstant(
+def findDistConstant(tr, br, bl, tl, dist=30):
+    rightSide = tr[1] - br[1]
+    leftSide = tl[1] - bl[1]
+
+    pix = (rightSide + leftSide) / 2
+    print(f"Multiply this {pix} by the constant to check how accurate the results are.")
+
+    return pix * dist
+
+
+
+
+
+
 
 while True:
     success, img = cap.read()
     tr, br, bl, tl = findArucoMarkers(img)
+
     #print(tr, br, bl,tl)
     if tl == None:
         cv2.putText(img, f"Please place the ArUco module exactly 30 cm away from the camera, ", (30, 70), font, fontScale, color, thickness, cv2.LINE_AA)
         cv2.putText(img, f"with it being directly in the center of the field of view.", (30, 150), font, fontScale, color, thickness, cv2.LINE_AA)
     else:
         cv2.putText(img, f"Hold it for 5s, then end program, and check the console for the constant.", (30, 150), font, fontScale, color, thickness, cv2.LINE_AA)
+        print(f"Distance constant for this camera is: {findDistConstant(tr,br,bl,tl)}")
     cv2.imshow('img',img)
 
     k = cv2.waitKey(30) & 0xff

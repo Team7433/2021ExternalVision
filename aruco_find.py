@@ -8,7 +8,7 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 1
 color = (0,255,255)
 thickness = 2
-const = 4830
+const = 15200
 
 
 
