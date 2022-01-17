@@ -1,6 +1,7 @@
 import cv2
 import cv2.aruco as aruco
 import time
+import math
 
 
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -57,6 +58,23 @@ def findkProportion(distance=30, do = False, img = None):
             cv2.putText(img, f"{count}", (10,10), font, fontScale, color, thickness, cv2.LINE_AA)
 
 
+def getDiffSides(tr, br, tl, bl):
+    if tr == None:
+        return None
+    else:
+        trX, trY = tr
+        brX, brY = br
+        tlX, tlY = tl
+        blX, blY = bl
+        rightSideLength = trY - brY
+        leftSideLength = tlY - blY
+
+        diffSides  = rightSideLength - leftSideLength
+
+        diffSides = diffSides ** 2
+        diffSides = math.sqrt(diffSides)
+
+        return diffSides
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -64,8 +82,10 @@ while True:
     success, img = cap.read()
     findkProportion(img=img, do=True)
     tr, br, bl, tl = findArucoMarkers(img)
+    print(getDiffSides(tr,br,tl,bl))
     if tr == None:
-        print(None)
+        #print(None)
+        pass
     else:
         trX, trY = tr
         brX, brY = br
@@ -76,11 +96,11 @@ while True:
         topRight = brY+blY
         topRight /= 2
         pix = topRight - topleft
-        print(pix)
+        #print(pix)
 
         dist = const/pix
         image = cv2.putText(img, f"Distance: {dist}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
-        print(dist)
+        #print(dist)
 
 
 
