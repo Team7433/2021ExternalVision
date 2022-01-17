@@ -49,14 +49,6 @@ def findArucoMarkers(img, markerSize = 6, totalMarkers=250):
     else:
         return None, None, None, None
 
-def findkProportion(distance=30, do = False, img = None):
-    if do == False:
-        return distance
-    elif do == True:
-        for count in range(5, 1):
-            time.sleep(1)
-            cv2.putText(img, f"{count}", (10,10), font, fontScale, color, thickness, cv2.LINE_AA)
-
 
 def getDiffSides(tr, br, tl, bl):
     if tr == None:
@@ -80,7 +72,6 @@ cap = cv2.VideoCapture(0)
 while True:
 
     success, img = cap.read()
-    findkProportion(img=img, do=True)
     tr, br, bl, tl = findArucoMarkers(img)
     print(getDiffSides(tr,br,tl,bl))
     if tr == None:
@@ -91,11 +82,11 @@ while True:
         brX, brY = br
         tlX, tlY = tl
         blX, blY = bl
-        topleft = trY+tlY
-        topleft /= 2
-        topRight = brY+blY
-        topRight /= 2
-        pix = topRight - topleft
+        rightSide = trY - brY
+        leftSide = tlY - blY
+        pix = rightSide + leftSide
+        pix /= 2
+
         #print(pix)
 
         dist = const/pix
