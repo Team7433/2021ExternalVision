@@ -2,13 +2,14 @@ import cv2
 import cv2.aruco as aruco
 import time
 import math
+import constants
 
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 1
 color = (0,255,255)
 thickness = 2
-const = 15200
+
 
 
 
@@ -67,29 +68,48 @@ def getDiffSides(tr, br, tl, bl):
         diffSides = math.sqrt(diffSides)
 
         return diffSides
+
+
+def findAngle(tr,br,tl,bl):
+    diff = getDiffSides(tr,br,tl,bl)
+    distance = findDistance(tr,br,tl,bl)
+    j = (constants.kOptimalPixels / diff) / (constants.kOptimalDistance / distance)
+    return constants.kOptimalAngle / j
+
+
+
+
+
+
+
+def findDistance(tr,br,tl,bl):
+    trX, trY = tr
+    brX, brY = br
+    tlX, tlY = tl
+    blX, blY = bl
+    rightSide = trY - brY
+    leftSide = tlY - blY
+    pix = rightSide + leftSide
+    pix /= 2
+    return pix
 cap = cv2.VideoCapture(0)
 
 while True:
 
     success, img = cap.read()
     tr, br, bl, tl = findArucoMarkers(img)
-    print(getDiffSides(tr,br,tl,bl))
+
     if tr == None:
         #print(None)
         pass
     else:
-        trX, trY = tr
-        brX, brY = br
-        tlX, tlY = tl
-        blX, blY = bl
-        rightSide = trY - brY
-        leftSide = tlY - blY
-        pix = rightSide + leftSide
-        pix /= 2
+        pix = findDistance(tr,br,tl,bl)
+        print(getDiffSides(tr, br, tl, bl))
+        print(findAngle(tr, br, tl, bl))
 
         #print(pix)
 
-        dist = const/pix
+        dist = constants.kDistanceCalculationConstant/pix
         image = cv2.putText(img, f"Distance: {dist}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
         #print(dist)
 
