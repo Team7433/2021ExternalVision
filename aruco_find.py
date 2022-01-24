@@ -77,11 +77,6 @@ def findAngle(tr,br,tl,bl):
     return constants.kOptimalAngle / j
 
 
-
-
-
-
-
 def findDistance(tr,br,tl,bl):
     trX, trY = tr
     brX, brY = br
@@ -92,6 +87,19 @@ def findDistance(tr,br,tl,bl):
     pix = rightSide + leftSide
     pix /= 2
     return pix
+
+
+def findCoordinates(distance, angle, original_position=(2,0)):
+    phi = distance * math.cos(angle)
+    b = (distance ** 2) + (phi ** 2)
+    b = math.sqrt(b)
+    i, j = original_position
+    i += b
+    j += phi
+
+    return b,phi
+
+
 cap = cv2.VideoCapture(0)
 
 while True:
@@ -106,11 +114,15 @@ while True:
         pix = findDistance(tr,br,tl,bl)
         print(getDiffSides(tr, br, tl, bl))
         print(findAngle(tr, br, tl, bl))
+        coords = findCoordinates(findDistance(tr,br,tl,bl), findAngle(tr,br,tl,bl))
+        angle = findAngle(tr,br,tl,bl)
 
         #print(pix)
 
         dist = constants.kDistanceCalculationConstant/pix
-        image = cv2.putText(img, f"Distance: {dist}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
+        cv2.putText(img, f"Distance: {dist}", tr, font, fontScale, color, thickness, cv2.LINE_AA)
+        cv2.putText(img, f"Coords: {coords}", tl, font, fontScale, color, thickness, cv2.LINE_AA)
+        cv2.putText(img, f"Angle: {angle}", br, font, fontScale, color, thickness, cv2.LINE_AA)
         #print(dist)
 
 
